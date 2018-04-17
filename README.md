@@ -31,3 +31,12 @@ npm install express --save
 npm install mongoose -- save
 npm install body-parser --save
 ```
+
+## Run
+
+Execute each one of the following commands in different command prompts:
+
+```
+ng serve --open --port 4202
+node server.js
+```
