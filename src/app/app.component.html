@@ -1,38 +1,67 @@
-<form #userForm="ngForm" (ngSubmit)="onSave(userForm.value)" novalidate>  
-  <p>Is "myForm" valid? {{userForm.valid}}</p>  
- <table border='1'>  
-    <tr>  
-      <td>name</td>  
-      <td>   
-        <input name="id" type="hidden" [(ngModel)]="id" />  
-        <input name="name" type="text" required [(ngModel)]="name" />  
-      </td>
-    </tr>  
-    <tr>  
-      <td>address</td>  
-      <td><input name="address" required  type="text" [(ngModel)]="address" /></td>  
-    </tr>  
-    <tr>  
-      <td colspan="2">  
-        <input type="submit" value="{{valbutton}}" />  
-      </td>
-    </tr>  
- </table>  
-</form>   
+<div class="container">
+  <h1>Manage Users</h1>
+  <h2>User Form:</h2>
   
-<table border='1'>  
-  <tr>  
-    <td>Id</td>  
-    <td>Name</td>  
-    <td>Address</td>  
-    <td>Edit</td>  
-    <td>Delete</td>  
-  </tr>  
-  <tr *ngFor="let kk of Repdata;let ind = index">  
-    <td>{{ind + 1}}</td>  
-    <td>{{kk.name}}</td>  
-    <td>{{kk.address}}</td>  
-    <td><a (click)="edit(kk)" style="color:blueviolet">Edit</a></td>  
-    <td><a (click)="delete(kk._id)" style="color:blueviolet">Delete</a>  </td>  
-  </tr>  
-</table>  
+  <form #userForm="ngForm" (ngSubmit)="onSave(userForm.value)" ngNativeValidate>  
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input name="id" type="hidden" [(ngModel)]="id">  
+      <input name="name" type="text" id="name" class="form-control" required [(ngModel)]="name" #annonimous="ngModel">
+      <div [hidden]="annonimous.valid || annonimous.touched || annonimous.pristine" class="alert alert-danger">
+        Name is required
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="city">City</label>
+      <input name="city" type="text" id="city" class="form-control" required [(ngModel)]="city" />
+    </div>
+    <button type="submit" class="btn btn-success" >{{valueButton}}</button>
+    
+    <!--  Disable button if form is not valid
+          [disabled]="!userForm.valid" -->
+    <!-- <p>Is "myForm" valid? {{userForm.valid}}</p> -->
+    <!-- <table border='1'>  
+      <tr>  
+        <td>name</td>  
+        <td>   
+          <input name="id" type="hidden" [(ngModel)]="id" />  
+          <input name="name" type="text" required [(ngModel)]="name" />  
+        </td>
+      </tr>  
+      <tr>  
+        <td>address</td>  
+        <td><input name="address"  type="text" required [(ngModel)]="address" /></td>  
+      </tr>  
+      <tr>  
+        <td colspan="2">  
+          <input type="submit" value="{{valueButton}}" />  
+        </td>
+      </tr>  
+    </table>  -->
+  </form> 
+</div>  
+  
+<div class="container">
+  <h2>Users List:</h2>
+  <table class="table table-bordered table-hover">  
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>  
+        <th>City</th>  
+        <th>Actions</th>
+      </tr>
+    </thead> 
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">  
+        <td>{{ i + 1 }}</td>  
+        <td>{{ user.name }}</td>  
+        <td>{{ user.city }}</td>  
+        <td class="text-center">
+          <a (click)="edit(user)" class="btn btn-info"><span class='glyphicon glyphicon-edit'></span> Edit</a>
+          <a (click)="delete(user._id)" class="btn btn-danger"><span class='glyphicon glyphicon-remove'></span> Delete</a>
+        </td>  
+      </tr>
+    </tbody>
+  </table>  
+</div>

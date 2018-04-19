@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';  
 import { FormGroup, FormControl, Validators, FormsModule } from '@angular/forms';  
-import { CommonService } from './common.service';  
+import { CrudService } from './crud.service';  
    
-import { Http,Response, Headers, RequestOptions } from '@angular/http';   
+// import { Http,Response, Headers, RequestOptions } from '@angular/http';   
   
 @Component({  
   selector: 'app-root',  
@@ -11,31 +11,44 @@ import { Http,Response, Headers, RequestOptions } from '@angular/http';
 })  
 export class AppComponent {  
     
-  constructor(private newService : CommonService) { }  
-  Repdata;  
-  valbutton = "Save";
+  constructor(private crudService: CrudService) { }  
+  users = "";
+  valueButton = "Save";
 
   ngOnInit() {    
-    this.newService.getUser().subscribe(data => this.Repdata = data)  
+    this.init();
   }  
-    
-  onSave = function(user,isValid: boolean) {    
-    user.mode= this.valbutton;  
-    this.newService.saveUser(user)
-      .subscribe(data => { alert(data.data);
-        this.ngOnInit();    
-      }   
-      , error => this.errorMessage = error )
+  onSave = function(user) {    
+    user.mode = this.valueButton;
+    if(user.mode == "Save"){
+      this.crudService.saveUser(user)
+        .subscribe(stored => { alert(stored.data); this.ngOnInit(); },
+        error => this.errorMessage = error )
+    } else {
+      this.crudService.updateUser(user)
+        .subscribe(stored => { alert(stored.data); this.ngOnInit(); },
+        error => this.errorMessage = error )
+    }    
   }      
-  edit = function(kk) {  
-    this.id = kk._id;  
-    this.name = kk.name;  
-    this.address = kk.address;  
-    this.valbutton = "Update";  
-  }  
-    
+  edit = function(user) {  
+    this.id = user._id;  
+    this.name = user.name;  
+    this.city = user.city;  
+    this.valueButton = "Update";  
+  } 
   delete = function(id) {  
-    this.newService.deleteUser(id)  
-      .subscribe(data => { alert(data.data); this.ngOnInit(); }, error => this.errorMessage = error )
+    this.crudService.deleteUser(id)  
+      .subscribe(stored => { alert(stored.data); this.ngOnInit(); }, 
+      error => this.errorMessage = error )
+  }
+  init = function(){
+    this.crudService.getUsers().subscribe(data => this.users = data);
+    this.clearFields();
+    this.valueButton = "Save";
+  }
+  clearFields = function(){
+    this.id = null;
+    this.name = null;
+    this.city = null;
   }
 }  

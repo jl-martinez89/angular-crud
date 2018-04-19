@@ -23,32 +23,32 @@ app.use(function (req, res, next) {
 	
 var Schema = mongo.Schema;  
 var UsersSchema = new Schema({      
-	name: { type: String   },       
-	address: { type: String   },   
+	name: { type: String },       
+	city: { type: String },   
 },{ versionKey: false });
 var model = mongo.model('users', UsersSchema, 'users');  
 	
-app.post("/api/SaveUser",function(req,res){   
- var mod = new model(req.body);  
- if(req.body.mode =="Save") {  
-		mod.save(function(err,data){  
-			if(err) {
-				res.send(err);                
-			} else {     
-				res.send({ data:"Record has been Inserted..!!" });  
-			}  
- 		});  
-	} else {  
-		model.findByIdAndUpdate(req.body.id, { name: req.body.name, address: req.body.address}, 
-			function(err,data) {
-				if (err) {  
-					res.send(err);         
-				} else{        
-					res.send({data:"Record has been Updated..!!"});  
-				}
-		});  
-	} 
-})  
+app.post("/api/saveUser", function(request, result){   
+  var mod = new model(request.body);
+	mod.save(function(err,data){
+		if(err) {
+			result.send(err);                
+		} else {     
+			result.send({ data:"Record has been Inserted..!!" });  
+		}  
+	});
+})
+
+app.post("/api/updateUser", function(request, result){
+	model.findByIdAndUpdate(request.body.id, { name: request.body.name, city: request.body.city}, 
+		function(err, data) {
+			if (err) {  
+				result.send(err);         
+			} else{        
+				result.send({ data:"Record has been Updated..!!" });  
+			}
+	});
+})
 	
 app.post("/api/deleteUser",function(req,res) {      
 	model.remove({ _id: req.body.id }, function(err) {    
@@ -60,7 +60,7 @@ app.post("/api/deleteUser",function(req,res) {
  	});    
 })  
 	
-app.get("/api/getUser",function(req,res) {
+app.get("/api/getUsers",function(req,res) {
 	model.find({},function(err,data){  
 		if(err) {  
 			res.send(err);  

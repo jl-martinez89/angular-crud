@@ -6,21 +6,24 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';  
   
 @Injectable()  
-export class CommonService {  
+export class CrudService {
   
-  constructor(private http: Http) { }  
+  constructor(private _http: Http) { }  
   
   saveUser(user){      
-    return this.http.post('http://localhost:8080/api/SaveUser/', user)  
+    return this._http.post('http://localhost:8080/api/saveUser/', user)  
       .map((response: Response) => response.json())              
-  }  
-  
-  getUser(){       
-    return this.http.get('http://localhost:8080/api/getUser/')  
+  }
+  updateUser(user){      
+    return this._http.post('http://localhost:8080/api/updateUser/', user)  
       .map((response: Response) => response.json())              
-  }  
+  }
   deleteUser(id){   
-    return this.http.post('http://localhost:8080/api/deleteUser/',{'id': id})  
+    return this._http.post('http://localhost:8080/api/deleteUser/',{'id': id})  
       .map((response: Response) => response.json())               
   }  
+  getUsers(){       
+    return this._http.get('http://localhost:8080/api/getUsers/')  
+      .map((response: Response) => response.json())              
+  }
 }  
